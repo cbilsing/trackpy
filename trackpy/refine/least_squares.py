@@ -853,6 +853,16 @@ def refine_leastsq(f, reader, diameter, separation=None, fit_function='gauss',
 
                 # check if found coords are MAX_SHIFT px from image center.
                 new_coords = params[:, 2:2+ndim]
+
+                # BEGINN
+                # if np.all(np.sum((new_coords - coords)**2, 1) > 3**2 + 3**2 - 2*1e-6):
+                diff_coords = new_coords - coords
+                if np.max(np.abs(diff_coords)) >= 2.9:
+                    # overwrite new position with old position
+                    params[:, 2:2+ndim] = coords
+                    break
+                # ENDE
+
                 if np.all(np.sum((new_coords - coords)**2, 1) < max_shift**2):
                     break  # stop iteration: accept result
 
